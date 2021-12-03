@@ -1,8 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import Vuex from "vuex";
+import App from "./App.vue";
+import router from "./router";
+import VueRouter from "vue-router";
+import axios from "axios";
 
-Vue.config.productionTip = false
+Vue.use(Vuex);
+Vue.use(VueRouter);
+axios.defaults.baseURL = "https://doeuning.github.io/";
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  render: (h) => h(App),
+}).$mount("#app");
