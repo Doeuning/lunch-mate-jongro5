@@ -7,7 +7,10 @@ import axios from "axios";
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
-axios.defaults.baseURL = "https://doeuning.github.io/";
+
+// axios.defaults.baseURL = "https://doeuning.github.io/";
+axios.defaults.baseURL = "https://api.hnpwa.com/v0/news/1.json";
+// axios.defaults.baseURL = "https://openapi.naver.com";
 
 new Vue({
   router,

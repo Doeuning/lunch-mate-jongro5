@@ -5,6 +5,9 @@ import QuestionHard from "/src/views/question-hard.vue";
 import Address from "/src/views/address-page.vue";
 import Transition from "/src/views/transition-page.vue";
 import Qna from "/src/views/qna.vue";
+import Async from "/src/views/async.vue";
+import CheckAll from "/src/views/check-all.vue";
+import CheckAll2 from "/src/views/check-all2.vue";
 
 const routes = [
   { path: "/", component: BridgeIntro },
@@ -13,6 +16,9 @@ const routes = [
   { path: "/address", component: Address },
   { path: "/transition", component: Transition },
   { path: "/qna", component: Qna },
+  { path: "/async", component: Async },
+  { path: "/check-all", component: CheckAll },
+  { path: "/check-all2", component: CheckAll2 },
 ];
 
 const router = new VueRouter({

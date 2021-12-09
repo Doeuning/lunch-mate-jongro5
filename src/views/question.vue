@@ -8,7 +8,6 @@
         <transition-group tag="ul" name="list" appear>
           <li v-for="a in qna[currState].a" :key="a.link">
             <form-radio
-              v-model="a.value"
               :radioTitle="a.msg"
               :radioName="qna[currState].name"
               :radioId="a.link"
@@ -65,12 +64,10 @@ export default {
           name: "drink",
           a: [
             {
-              value: false,
               msg: "네, 먹었어요.",
               link: "drink-yes",
             },
             {
-              value: false,
               msg: "안 먹었어요.",
               link: "drink-no",
             },
@@ -81,12 +78,10 @@ export default {
           name: "drink-yes",
           a: [
             {
-              value: false,
               msg: "속이 울렁거려요.",
               link: "sick-yes",
             },
             {
-              value: false,
               msg: "괜찮습니다.",
               link: "sick-no",
             },
@@ -97,12 +92,10 @@ export default {
           name: "drink-no",
           a: [
             {
-              value: false,
               msg: "집밥 먹었어요.",
               link: "home-yes",
             },
             {
-              value: false,
               msg: "사 먹었어요.",
               link: "home-no",
             },
@@ -113,22 +106,18 @@ export default {
           name: "sick-no",
           a: [
             {
-              value: false,
               msg: "한식",
               link: "korean-type",
             },
             {
-              value: false,
               msg: "중식",
               link: "chinese",
             },
             {
-              value: false,
               msg: "일식",
               link: "japanese",
             },
             {
-              value: false,
               msg: "이탈리안",
               link: "italian",
             },
@@ -139,12 +128,10 @@ export default {
           name: "home-yes",
           a: [
             {
-              value: false,
               msg: "흠...",
               link: "sick-no",
             },
             {
-              value: false,
               msg: "비교적 저렴하게 영양소를 골고루 채우고 싶어요.",
               link: "subway",
             },
@@ -155,17 +142,14 @@ export default {
           name: "home-no",
           a: [
             {
-              value: false,
               msg: "엄마 보고싶다...",
               link: "mom",
             },
             {
-              value: false,
               msg: "아니요? 솔직히 뭘 먹고싶은지 모르겠는데... 그건 아니에요.",
               link: "no-food",
             },
             {
-              value: false,
               msg: "집밥st 좋아요.",
               link: "home-food",
             },
@@ -176,22 +160,18 @@ export default {
           name: "korean-type",
           a: [
             {
-              value: false,
               msg: "한국인은 나트륨.",
               link: "korean",
             },
             {
-              value: false,
               msg: "그나마 건강식을 먹고싶어요.",
               link: "korean2",
             },
             {
-              value: false,
               msg: "이것저것 다 먹고싶어요.",
               link: "korean3",
             },
             {
-              value: false,
               msg: "메인 메뉴 각각 하나 시키고 반찬이랑 먹고싶어요.",
               link: "korean4",
             },

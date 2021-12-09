@@ -1,35 +1,34 @@
 <template>
-  <label class="input" :for="checkId">
+  <label :for="checkId" :class="{ input: true, checked: checked }">
     <input
       type="checkbox"
       :id="checkId"
       :name="checkName"
       :checked="checked"
-      :disabled="currChecked >= 2 && !this.checked ? true : false"
-      v-model="checked"
-      @input="changeEvent($event)"
+      @change="sendEvent"
     />
-    <span class="title">{{ checkTitle }}</span>
+    <strong class="title" v-if="checkStrong">{{ checkTitle }}</strong>
+    <span class="title" v-else>{{ checkTitle }}</span>
   </label>
 </template>
 
 <script>
 export default {
-  name: 'form-checkbox',
+  name: "form-checkbox",
   props: [
-    'checkName',
-    'checkId',
-    'checkTitle',
-    'checked',
-    'maxCheck',
-    'currChecked',
+    "checkName",
+    "checkId",
+    "checkTitle",
+    "checked",
+    "maxCheck",
+    "checkStrong",
   ],
+  // model: { prop: "checked", event: "get-checked" },
   methods: {
-    changeEvent($event) {
-      this.$emit('get-checked', $event.target.checked);
+    sendEvent() {
+      this.$emit("get-checked");
     },
   },
-  model: { prop: 'checked', event: 'get-checked' },
 };
 </script>
 <style scoped lang="scss">
@@ -52,18 +51,21 @@ export default {
   }
   .title {
     display: block;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 20px;
     line-height: 1.5;
     color: #8997bd;
     transition: all 0.3s;
   }
-  input[type='checkbox'] {
+  strong.title {
+    font-weight: 700;
+  }
+  input[type="checkbox"] {
     & ~ .title {
       padding: 0 0 0 30px;
       &::before {
         display: block;
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 0;
@@ -76,7 +78,7 @@ export default {
       }
       &::after {
         display: block;
-        content: 'v';
+        content: "v";
         position: absolute;
         top: 50%;
         left: 5px;
@@ -98,14 +100,15 @@ export default {
         color: #dddddd;
       }
     }
-    &:checked ~ .title {
-      color: #252f3e;
-      &::before {
-        border-color: #252f3e;
-      }
-      &::after {
-        color: #252f3e;
-      }
+  }
+  &.checked .title {
+    color: cornflowerblue;
+    &::before {
+      border-color: cornflowerblue !important;
+      background: cornflowerblue;
+    }
+    &::after {
+      color: #fff;
     }
   }
 }
