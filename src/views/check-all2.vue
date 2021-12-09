@@ -5,9 +5,8 @@
         :checkStrong="true"
         :checkTitle="'전체동의'"
         :checked="agree1.checkAll"
-        :checkLength="agree1.checkLength"
-        :checkedArray="agree1.checkedArray.length"
-        @get-checked-all="getChecked(agree1)"
+        :checkLength="agree1.policies"
+        :checkedArray="agree1.checkedArray"
       />
     </div>
     <ul>
@@ -103,12 +102,12 @@ export default {
     "form-checkbox-all": FormCheckboxAll,
   },
   computed: {
-    checkLength() {
-      return this.policies.length;
-    },
-    checkAll() {
-      return this.checkedArray.length === this.checkLength;
-    },
+    // checkLength() {
+    //   return this.policies.length;
+    // },
+    // checkAll() {
+    //   return this.checkedArray.length === this.checkLength;
+    // },
   },
   methods: {
     getChecked(group, policy) {

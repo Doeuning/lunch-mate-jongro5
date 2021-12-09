@@ -1,33 +1,24 @@
 <template>
-  <label :for="checkId" :class="{ input: true, checked: checked }">
-    <input
-      type="checkbox"
-      :id="checkId"
-      :name="checkName"
-      :checked="checked"
-      @change="sendEvent"
-    />
-    <strong class="title" v-if="checkStrong">{{ checkTitle }}</strong>
-    <span class="title" v-else>{{ checkTitle }}</span>
+  <label class="input">
+    <input type="checkbox" :value="value" v-model="checkedList" />
+    <span class="title">
+      <slot></slot>
+    </span>
   </label>
 </template>
 
 <script>
 export default {
   name: "form-checkbox",
-  props: [
-    "checkName",
-    "checkId",
-    "checkTitle",
-    "checked",
-    "maxCheck",
-    "checkStrong",
-  ],
+  props: ["value", "checkedList"],
   // model: { prop: "checked", event: "get-checked" },
+  updated() {
+    // console.log(this.checkedList);
+  },
   methods: {
-    sendEvent() {
-      this.$emit("get-checked");
-    },
+    // sendEvent() {
+    //   this.$emit("get-checked");
+    // },
   },
 };
 </script>
