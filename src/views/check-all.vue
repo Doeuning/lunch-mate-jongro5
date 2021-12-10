@@ -2,11 +2,13 @@
   <div>
     <div class="check-wrap">
       <div class="check-all">
-        <form-checkbox-all>전체동의</form-checkbox-all>
+        <form-checkbox-all v-model="arr1.all" @change="agreeAll(arr1)"
+          >전체동의</form-checkbox-all
+        >
       </div>
       <ul>
         <li v-for="policy in arr1.list" :key="policy.id">
-          <form-checkbox :value="policy.id" :checkedList="arr1.checked">{{
+          <form-checkbox :checked="policy.checked" v-model="arr1.checked">{{
             policy.title
           }}</form-checkbox>
           {{ arr1.checked }}
@@ -16,18 +18,34 @@
     <div class="check-wrap">
       <div class="check-all">
         <label>
-          <input type="checkbox" v-model="arr2.all" />
+          <input type="checkbox" v-model="arr2.all" @change="agreeAll(arr2)" />
           전체동의
         </label>
       </div>
       <ul>
         <li v-for="policy in arr2.list" :key="policy.id">
           <label>
-            <input type="checkbox" :value="policy.id" v-model="arr2.checked" />
+            <input
+              type="checkbox"
+              :value="policy.id"
+              v-model="arr2.checked"
+              @change="changeEvent(arr2)"
+            />
             {{ policy.title }}
           </label>
         </li>
       </ul>
+    </div>
+    <div class="check-wrap">
+      <!--      <label>-->
+      <!--        <input-->
+      <!--          type="checkbox"-->
+      <!--          :value="policy.id"-->
+      <!--          v-model="arr2.checked"-->
+      <!--          @change="changeEvent(arr2)"-->
+      <!--        />-->
+      <!--        {{ policy.title }}-->
+      <!--      </label>-->
     </div>
   </div>
 </template>
@@ -82,7 +100,22 @@ export default {
     "form-checkbox-all": formCheckboxAll,
   },
   computed: {},
-  methods: {},
+  methods: {
+    changeEvent(arr) {
+      arr.all = false;
+      if (arr.list.length === arr.checked.length) {
+        arr.all = true;
+      }
+    },
+    agreeAll(arr) {
+      arr.checked = [];
+      if (arr.all) {
+        arr.list.forEach((item) => {
+          arr.checked.push(item.id);
+        });
+      }
+    },
+  },
 };
 </script>
 

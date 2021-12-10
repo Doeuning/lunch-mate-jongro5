@@ -1,6 +1,11 @@
 <template>
-  <label class="input">
-    <input type="checkbox" :value="value" v-model="checkedList" />
+  <label :class="{ input: true, checked: checked }">
+    <input
+      type="checkbox"
+      :checked="checked"
+      :value="value"
+      @change="$emit('change', $event.target.checked)"
+    />
     <span class="title">
       <slot></slot>
     </span>
@@ -10,10 +15,13 @@
 <script>
 export default {
   name: "form-checkbox",
-  props: ["value", "checkedList"],
-  // model: { prop: "checked", event: "get-checked" },
-  updated() {
-    // console.log(this.checkedList);
+  props: {
+    checked: Boolean,
+    value: String,
+  },
+  model: {
+    prop: "checked",
+    event: "change",
   },
   methods: {
     // sendEvent() {
