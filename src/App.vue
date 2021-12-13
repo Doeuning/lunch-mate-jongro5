@@ -17,14 +17,20 @@
   </div>
 </template>
 <script>
-
 export default {
-  name: 'App',
-}
+  name: "App",
+};
 </script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;700&display=swap");
+@font-face {
+  font-family: "D2Coding";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/D2Coding.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 html,
 body {
   //overflow: hidden;

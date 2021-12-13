@@ -1,5 +1,6 @@
 module.exports = {
   devServer: {
+    overlay: false,
     proxy: {
       "/async": {
         target: "https://api.hnpwa.com",
