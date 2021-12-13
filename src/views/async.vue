@@ -254,8 +254,7 @@ function <strong>fetchTodo</strong>() {
   // 응답(항상 실행)
   .then(function() {
     // ...
-  });
-          </pre>
+  });</pre>
         </div>
         <h3 class="h3">async await를 함께 사용해서 좀 더 보기 좋게 쓰기</h3>
         <div class="code">
