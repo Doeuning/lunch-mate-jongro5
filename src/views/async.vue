@@ -365,6 +365,7 @@ export default {
 
       function getUserVideos(email, callback) {
         setTimeout(() => {
+          console.log("2. 이메일을 받았습니다", email);
           const movies = [
             { title: "타이타닉", type: "눈물샘 자극" },
             { title: "나 홀로 집에", type: "재미있음" },
@@ -376,6 +377,7 @@ export default {
 
       function videoDetails(video, callback) {
         setTimeout(() => {
+          console.log("3. 비디오를 받았습니다", video);
           callback(video);
         }, 2000);
       }
@@ -415,6 +417,7 @@ export default {
               { title: "화이트칙스", type: "웃김" },
             ];
             resolve(movies);
+            // reject(new Error("에러입니다~~~~~~"));
           }, 2000);
         });
       }

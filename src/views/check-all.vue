@@ -48,17 +48,6 @@
         </li>
       </ul>
     </div>
-    <div class="check-wrap">
-      <!--      <label>-->
-      <!--        <input-->
-      <!--          type="checkbox"-->
-      <!--          :value="policy.id"-->
-      <!--          v-model="arr2.checked"-->
-      <!--          @change="changeEvent(arr2)"-->
-      <!--        />-->
-      <!--        {{ policy.title }}-->
-      <!--      </label>-->
-    </div>
   </div>
 </template>
 
