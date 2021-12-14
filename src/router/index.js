@@ -10,7 +10,9 @@ import CheckAll from "/src/views/check-all.vue";
 import CheckAll2 from "/src/views/check-all2.vue";
 
 const routes = [
-  { path: "/", component: BridgeIntro },
+  // { path: "/", component: BridgeIntro },
+  { path: "/bridge", component: BridgeIntro },
+  { path: "/", component: Async },
   { path: "/question", component: Question },
   { path: "/question-hard", component: QuestionHard },
   { path: "/address", component: Address },

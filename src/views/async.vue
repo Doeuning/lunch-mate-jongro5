@@ -18,20 +18,49 @@
         </div>
         <div class="ex">
           <div class="btn-wrap">
-            <button type="button" class="btn" @click="actionDelay">동기</button>
+            <button type="button" class="btn" @click="actionSync">동기</button>
+          </div>
+          <!--          <ul v-if="results" class="news-header">-->
+          <!--            <li v-for="item in results" :key="item.id">-->
+          <!--              {{ item.title }}-->
+          <!--            </li>-->
+          <!--          </ul>-->
+        </div>
+        <div class="code">
+          <pre>
+function <strong class="c1">msg()</strong> {
+  <strong>console.log("안녕하세요.");
+  console.log("저는 김도은입니다.");</strong>
+}
+
+<strong>console.log("시작");</strong>
+<strong class="c1">msg();</strong>
+<strong>console.log("끝");</strong></pre>
+        </div>
+        <div class="ex">
+          <div class="btn-wrap">
             <button type="button" class="btn" @click="actionAsync">
               비동기
             </button>
-            <button type="button" class="btn" @click="getData(callBack)">
-              콜백함수
-            </button>
           </div>
-          <ul v-if="results" class="news-header">
-            <li v-for="item in results" :key="item.id">
-              {{ item.title }}
-            </li>
-          </ul>
         </div>
+        <div class="code">
+          <pre>
+<strong>console.log("시작");</strong>
+
+setTimeout(() => {
+  <strong class="c1">console.log("2초가 지났습니다.");</strong>
+}, 2000);
+
+<strong>console.log("끝");</strong></pre>
+        </div>
+        <!--        <div class="ex">-->
+        <!--          <div class="btn-wrap">-->
+        <!--            <button type="button" class="btn" @click="getData(callBack)">-->
+        <!--              콜백함수-->
+        <!--            </button>-->
+        <!--          </div>-->
+        <!--        </div>-->
         <h3 class="h3">ex) 집안을 치우고 라면을 끓여먹자!</h3>
         <div class="ex">
           <img
@@ -47,25 +76,13 @@
             콜백으로 결과를 받은 뒤 순차적으로 다음 작업을 진행하고자 할 때 발생
           </p>
         </div>
+        <div class="ex">
+          <div class="btn-wrap">
+            <button class="btn" @click="callbackHell">콜백지옥</button>
+          </div>
+        </div>
         <div class="code">
-          <pre>
-<strong class="c1">loadLink</strong>(<strong>function</strong>(){
-  <strong class="c1">loadLink</strong>(<strong>function</strong>(){
-    <strong class="c1">loadLink</strong>(<strong>function</strong>(){
-      <strong class="c1">loadLink</strong>(<strong>function</strong>(){
-        <strong class="c1">loadLink</strong>(<strong>function</strong>(){
-          <strong class="c1">loadLink</strong>(<strong>function</strong>(){})
-        })
-      })
-    })
-  })
-})
-
-function <strong class="c1">loadLink</strong>( <strong>callback</strong> ){
-  setTimeout(() => {
-    <strong>callback();</strong>
-  }, 1000);
-}</pre>
+          <pre>callbackHell();</pre>
         </div>
       </li>
       <li>
@@ -106,39 +123,58 @@ function <strong class="c1">loadLink</strong>( <strong>callback</strong> ){
             </li>
           </ul>
         </div>
+        <div class="ex">
+          <div class="btn-wrap">
+            <button class="btn" @click="promiseAction">promise</button>
+          </div>
+        </div>
         <div class="code">
           <pre>
-var <strong class="c2">_promise</strong> = function(<strong class="c3">param</strong>){
-  return <strong class="c2">new Promise</strong>(function(<strong>resolve, reject</strong>){
-    // 비동기를 표현하기 위해 setTimeout 함수를 사용
-    setTimeout(function(){
-      <strong class="c1">// 파라미터가 참이면,</strong>
-      if (<strong class="c3">param</strong>) {
-        // 해결됨
-        <strong>resolve('해결 완료);</strong>
-      }
-      <strong class="c1">// 파라미터가 거짓이면,</strong>
-      else {
-        <strong>reject(new Error('실패!'));</strong>
-      }
-    }, 3000);
-  });
-};
+console.log("시작");
 
-// Promise 실행
-<strong class="c2">_promise(<strong class="c3">true</strong>)</strong>
-  <strong class="c1">.then</strong>(<strong>function (text) {
-    // 성공시
-    console.log(text);
-  }</strong>, <strong>function (error) {
-    // 실패시
-    console.error(error);
-  }</strong>)<strong class="c1">.catch</strong>(error => console.log(error));
-          </pre>
+function <strong>loginUser</strong>(<strong class="c1">email</strong>, password) {
+  return new Promise((<strong class="c2">resolve</strong>) => {
+    setTimeout(() => {
+      console.log("1. 데이터를 받았습니다", email, password);
+      <strong class="c2">resolve</strong>({ userEmail: <strong class="c1">email</strong> });
+    }, 2000);
+  });
+}
+
+function <strong>getUserVideos</strong>(email) {
+  return new Promise((<strong class="c2">resolve</strong>) => {
+    setTimeout(() => {
+      console.log("2. 이메일을 받았습니다", email);
+      const <strong class="c1">movies</strong> = [
+        { title: "타이타닉", type: "눈물샘 자극" },
+        { title: "나 홀로 집에", type: "재미있음" },
+        { title: "화이트칙스", type: "웃김" },
+      ];
+      <strong class="c2">resolve</strong>(<strong class="c1">movies</strong>);
+    }, 2000);
+  });
+}
+
+function <strong>videoDetails</strong>(<strong class="c1">video</strong>) {
+  return new Promise((<strong class="c2">resolve</strong>) => {
+    setTimeout(() => {
+      console.log("3. 비디오를 받았습니다", video);
+      <strong class="c2">resolve</strong>(<strong class="c1">video</strong>);
+    }, 2000);
+  });
+}
+
+const user = loginUser(<strong class="c1">"hahahoho@gmail.com", "fsdf"</strong>)
+  .<strong class="c3">then</strong>((<strong class="c1">user</strong>) => getUserVideos(<strong class="c1">user</strong>.userEmail))
+  .<strong class="c3">then</strong>((<strong class="c1">videos</strong>) => videoDetails(<strong class="c1">videos</strong>[0]))
+  .<strong class="c3">then</strong>((<strong class="c1">movie</strong>) => console.log(<strong class="c1">movie</strong>.type))
+  .<strong class="c3">catch</strong>((<strong class="c2">error</strong>) => console.log(<strong class="c2">error</strong>.message));
+
+console.log(user);
+console.log("끝");</pre>
         </div>
         <div class="desc">
           <p>
-            _promise()를 호출하면 Promise 객체가 리턴된다.<br />
             Promise 객체에는 정상적으로 비동기작업이 완료되었을 때 호출하는
             then이라는 API가 존재한다.<br />
             위의 예제는 하나의 then API를 호출해서 비동기작업이 완료되면 결과에
@@ -158,16 +194,38 @@ var <strong class="c2">_promise</strong> = function(<strong class="c3">param</st
           </p>
           <p>resolve 시에는 then, reject 시에는 catch 가 실행된다.</p>
         </div>
+        <h3 class="h3">Promise All</h3>
+        <div class="desc">
+          <p>
+            여러 정보를 받아와 사용할 때 데이터 수집의 순서가 상관 없으면 then
+            체이닝으로 받는것은 시간낭비!
+          </p>
+          <p>
+            병렬구조로 동시다발적으로 데이터를 받아, 데이터 수집이 완료되면
+            결과를 보여준다.
+          </p>
+        </div>
         <div class="ex">
-          <button class="btn" @click="activePromise(true)">
-            promise 실행 - 성공
-          </button>
-          <button class="btn" @click="activePromise(false)">
-            promise 실행 - 실패
-          </button>
-          <button class="btn" @click="activePromise(null)">
-            promise 실행 - 에러
-          </button>
+          <button class="btn" @click="promiseAll()">promise all</button>
+        </div>
+        <div class="code">
+          <pre>
+const <strong>apple</strong> = new Promise((resolve) => {
+  setTimeout(() => {
+    console.log("사과의 정보를 받았다.");
+    resolve(["충주사과", "안동사과", "대구사과"]);
+  }, 2000);
+});
+
+const <strong>mango</strong> = new Promise((resolve) => {
+  setTimeout(() => {
+    console.log("망고의 정보를 받았다.");
+    resolve(["필리핀망고", "베트남망고", "태국망고"]);
+  }, 2000);
+});
+
+<strong class="c1">Promise.all</strong>([<strong>apple, mango</strong>]).then((result) => console.log(result));
+          </pre>
         </div>
       </li>
       <li>
@@ -184,42 +242,28 @@ var <strong class="c2">_promise</strong> = function(<strong class="c3">param</st
           </p>
           <p>여러개의 비동기 처리 코드를 다룰 때 유용하다.</p>
         </div>
+        <div class="ex">
+          <div class="btn-wrap">
+            <button class="btn" @click="asyncAwait">async await</button>
+          </div>
+        </div>
         <div class="code">
           <pre>
-// 사용자, 할 일 목록을 받아오는 HTTP 통신 코드
-
-function <strong>fetchUser</strong>() {
-  var url = 'https://jsonplaceholder.typicode.com/users/1'
-  <strong class="c1">return fetch(url).then(function(response) {
-    return response.json();
-  });</strong>
-}
-
-function <strong>fetchTodo</strong>() {
-  var url = 'https://jsonplaceholder.typicode.com/todos/1';
-  <strong class="c1">return fetch(url).then(function(response) {
-    return response.json();
-  });</strong>
+<strong>async</strong> function videoType() {
+  const loggedUser = <strong class="c1">await</strong> loginUser("doeun@gmail.com", 1234);
+  const videos = <strong class="c1">await</strong> getUserVideos(loggedUser.userEmail);
+  const detail = <strong class="c1">await</strong> videoDetails(videos[0]);
+  console.log(detail.type);
 }</pre>
         </div>
-        <div class="desc">
-          <p><strong>* fetch는 promise 기반의 API.</strong></p>
-        </div>
-        <ol class="order-list">
-          <li>fetchUser()를 이용하여 사용자 정보 호출</li>
-          <li>받아온 사용자 아이디가 1이면 할 일 정보 호출</li>
-          <li>받아온 할 일 정보의 제목을 콘솔에 출력</li>
-        </ol>
-        <div class="code">
-          <pre>
-<strong>async</strong> <strong class="c1">function logTodoTitle</strong>() {
-  var user = <strong>await</strong> <strong class="c1">fetchUser</strong>();
-  if (user.id === 1) {
-    var todo = <strong>await</strong> <strong class="c1">fetchTodo</strong>();
-    console.log(todo.title);
-  }
-}</pre>
-        </div>
+        <!--        <div class="desc">-->
+        <!--          <p><strong>* fetch는 promise 기반의 API.</strong></p>-->
+        <!--        </div>-->
+        <!--        <ol class="order-list">-->
+        <!--          <li>fetchUser()를 이용하여 사용자 정보 호출</li>-->
+        <!--          <li>받아온 사용자 아이디가 1이면 할 일 정보 호출</li>-->
+        <!--          <li>받아온 할 일 정보의 제목을 콘솔에 출력</li>-->
+        <!--        </ol>-->
       </li>
       <li>
         <h2 class="h2">5. axios</h2>
@@ -259,15 +303,24 @@ function <strong>fetchTodo</strong>() {
         <h3 class="h3">async await를 함께 사용해서 좀 더 보기 좋게 쓰기</h3>
         <div class="code">
           <pre>
-<strong>async function</strong> <strong class="c1">getUser</strong>() {
+<strong class="c3">async</strong> <strong>function</strong> <strong class="c1">getUser</strong>() {
   <strong>try</strong> {
-    const response = <strong>await axios.get</strong>('/user?ID=12345')
+    const response = <strong class="c3">await</strong> <strong>axios.get</strong>('/user?ID=12345')
     console.log(response)
   } <strong>catch</strong> (error) {
     console.error(error)
   }
-}
-          </pre>
+}</pre>
+        </div>
+        <div class="ex">
+          <div class="btn-wrap">
+            <a
+              href="https://kyun2da.dev/%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC/axios-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC/"
+              target="_blank"
+              class="btn"
+              >axios 더보기</a
+            >
+          </div>
         </div>
       </li>
     </ul>
@@ -285,99 +338,186 @@ export default {
       url: "https://api.hnpwa.com/v0/news/1.json",
     };
   },
-  mounted() {
-    this.test();
-  },
+  mounted() {},
   methods: {
     // 콜백함수 시작
-    getData(callbackFunction) {
-      console.log("1. getData 실행");
-      axios.get(this.url).then((res) => {
-        console.log("2. data 받아오기 성공");
-        callbackFunction(res.data);
-      });
-    },
-    callBack(getdata) {
-      console.log("3. callback함수 실행");
-      this.results = getdata;
-      console.log("4. 데이터 바인딩 성공");
-    },
-    test() {},
-    // 콜백함수 끝
-    actionAsync() {
-      console.log("1 : 비동기 매서드 실행");
+    // getData(callbackFunction) {
+    //   console.log("1. getData 실행");
+    //   axios.get(this.url).then((res) => {
+    //     console.log("2. data 받아오기 성공");
+    //     callbackFunction(res.data);
+    //   });
+    // },
+    // callBack(getdata) {
+    //   console.log("3. callback함수 실행");
+    //   this.results = getdata;
+    //   console.log("4. 데이터 바인딩 성공");
+    // },
+    callbackHell() {
+      console.log("시작");
 
-      setTimeout(function () {
-        console.log("------- 2 : 2초 후 실행");
-        alert("2초가 지났습니다.");
+      function loginUser(email, password, callback) {
+        setTimeout(() => {
+          console.log("1. 데이터를 받았습니다");
+          callback({ userEmail: email });
+        }, 2000);
+      }
+
+      function getUserVideos(email, callback) {
+        setTimeout(() => {
+          const movies = [
+            { title: "타이타닉", type: "눈물샘 자극" },
+            { title: "나 홀로 집에", type: "재미있음" },
+            { title: "화이트칙스", type: "웃김" },
+          ];
+          callback(movies);
+        }, 2000);
+      }
+
+      function videoDetails(video, callback) {
+        setTimeout(() => {
+          callback(video);
+        }, 2000);
+      }
+
+      const user = loginUser("hahahoho@gmail.com", "haha1", (user) => {
+        console.log(user);
+        getUserVideos(user.userEmail, (videos) => {
+          console.log(videos);
+          videoDetails(videos[0], (movie) => {
+            console.log(movie.type);
+          });
+        });
+      });
+
+      console.log(user);
+      console.log("끝");
+    },
+    promiseAction() {
+      console.log("시작");
+
+      function loginUser(email, password) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            console.log("1. 데이터를 받았습니다", email, password);
+            resolve({ userEmail: email });
+          }, 2000);
+        });
+      }
+
+      function getUserVideos(email) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            console.log("2. 이메일을 받았습니다", email);
+            const movies = [
+              { title: "타이타닉", type: "눈물샘 자극" },
+              { title: "나 홀로 집에", type: "재미있음" },
+              { title: "화이트칙스", type: "웃김" },
+            ];
+            resolve(movies);
+          }, 2000);
+        });
+      }
+
+      function videoDetails(video) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            console.log("3. 비디오를 받았습니다", video);
+            resolve(video);
+          }, 2000);
+        });
+      }
+
+      const user = loginUser("hahahoho@gmail.com", "fsdf")
+        .then((user) => getUserVideos(user.userEmail))
+        .then((videos) => videoDetails(videos[0]))
+        .then((movie) => console.log(movie.type))
+        .catch((error) => console.log(error.message));
+
+      console.log(user);
+      console.log("끝");
+    },
+    promiseAll() {
+      const apple = new Promise((resolve) => {
+        setTimeout(() => {
+          console.log("사과의 정보를 받았다.");
+          resolve(["충주사과", "안동사과", "대구사과"]);
+        }, 2000); // 4초로 바꿔보기
+      });
+
+      const mango = new Promise((resolve) => {
+        setTimeout(() => {
+          console.log("망고의 정보를 받았다.");
+          resolve(["필리핀망고", "베트남망고", "태국망고"]);
+        }, 2000);
+      });
+
+      Promise.all([apple, mango]).then((result) => console.log(result));
+    },
+    asyncAwait() {
+      console.log("시작");
+
+      function loginUser(email, password) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            console.log("1. 데이터를 받았습니다", email, password);
+            resolve({ userEmail: email });
+          }, 2000);
+        });
+      }
+
+      function getUserVideos(email) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            console.log("2. 이메일을 받았습니다", email);
+            const movies = [
+              { title: "타이타닉", type: "눈물샘 자극" },
+              { title: "나 홀로 집에", type: "재미있음" },
+              { title: "화이트칙스", type: "웃김" },
+            ];
+            resolve(movies);
+          }, 2000);
+        });
+      }
+
+      function videoDetails(video) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            console.log("3. 비디오를 받았습니다", video);
+            resolve(video);
+          }, 2000);
+        });
+      }
+
+      // async await 추가하기
+      function videoType() {
+        const loggedUser = loginUser("doeun@gmail.com", 1234);
+        const videos = getUserVideos(loggedUser.userEmail);
+        const detail = videoDetails(videos[0]);
+        console.log(detail.type);
+      }
+
+      videoType();
+      console.log("끝");
+    },
+    actionAsync() {
+      console.log("시작");
+
+      setTimeout(() => {
+        console.log("2초가 지났습니다.");
       }, 2000);
 
-      console.log("3 : 실행 중");
-
-      axios
-        .get(this.url)
-        .then((res) => {
-          this.results = res.data;
-          console.log("------- 4 : axios 완료");
-        })
-        .catch(function (error) {
-          if (error.response) {
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
-        });
-
-      console.log("5 : 실행 완료");
+      console.log("끝");
     },
-    actionDelay() {
-      this.delay(2000)
-        .then(() => this.delay(1000))
-        .then(() => Promise.resolve("끝"))
-        .then(console.log);
+    actionSync() {
+      function msg() {
+        console.log("안녕하세요.");
+        console.log("저는 김도은입니다.");
+      }
 
       console.log("시작");
-    },
-    delay(ms) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log(`${ms} 밀리초가 지났습니다.`);
-          resolve();
-        }, ms);
-      });
-    },
-    promise(param) {
-      return new Promise(function (resolve, reject) {
-        // 비동기를 표현하기 위해 setTimeout 함수를 사용
-        window.setTimeout(function () {
-          // 파라메터가 참이면,
-          if (param) {
-            // 해결됨
-            resolve("해결 완료");
-          }
-
-          // 파라메터가 거짓이면,
-          else {
-            // 실패
-            reject(new Error("실패!!"));
-          }
-        }, 1500);
-      });
-    },
-    activePromise(param) {
-      this.promise(param)
-        .then(
-          function (text) {
-            // 성공시
-            console.log("성공", text);
-          },
-          function (error) {
-            // 실패시
-            console.error("실패", error);
-          }
-        )
-        .catch(function (error) {
-          console.error("에러", error);
-        });
+      msg();
+      console.log("끝");
     },
   },
 };
@@ -492,7 +632,7 @@ ul {
             color: #ffd000;
           }
           &.c2 {
-            color: #fabeab;
+            color: #ff8b7a;
           }
           &.c3 {
             color: #6dc6ff;
@@ -515,6 +655,7 @@ ul {
           font-weight: 700;
           color: #fff;
           text-align: center;
+          text-decoration: none;
         }
 
         .flex {
