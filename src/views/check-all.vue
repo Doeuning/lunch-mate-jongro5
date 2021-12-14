@@ -1,6 +1,14 @@
 <template>
   <div>
     <div class="check-wrap">
+      <form-checkbox
+        :checked="single.checked"
+        v-model="single.checked"
+        :value="single.title"
+        >{{ single.title }}</form-checkbox
+      >
+    </div>
+    <div class="check-wrap">
       <div class="check-all">
         <form-checkbox-all v-model="arr1.all" @change="agreeAll(arr1)"
           >전체동의</form-checkbox-all
@@ -8,9 +16,13 @@
       </div>
       <ul>
         <li v-for="policy in arr1.list" :key="policy.id">
-          <form-checkbox :checked="policy.checked" v-model="arr1.checked">{{
-            policy.title
-          }}</form-checkbox>
+          <form-checkbox
+            :checked="policy.checked"
+            v-model="arr1.checked"
+            :value="policy.title"
+            @change="changeEvent(arr1)"
+            >{{ policy.title }}</form-checkbox
+          >
           {{ arr1.checked }}
         </li>
       </ul>
@@ -57,6 +69,11 @@ export default {
   name: "check-all",
   data() {
     return {
+      single: {
+        checked: false,
+        id: "single1",
+        title: "오징어튀김",
+      },
       arr1: {
         all: false,
         checked: [],
@@ -111,7 +128,7 @@ export default {
       arr.checked = [];
       if (arr.all) {
         arr.list.forEach((item) => {
-          arr.checked.push(item.id);
+          arr.checked.push(item.title);
         });
       }
     },

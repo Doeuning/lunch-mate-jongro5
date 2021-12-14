@@ -1,10 +1,10 @@
 <template>
-  <label :class="{ input: true, checked: checked }">
+  <label :class="{ input: true, checked: classBind }">
     <input
       type="checkbox"
       :checked="checked"
       :value="value"
-      @change="$emit('change', $event.target.checked)"
+      @change="sendEvent"
     />
     <span class="title">
       <slot></slot>
@@ -16,17 +16,41 @@
 export default {
   name: "form-checkbox",
   props: {
-    checked: Boolean,
+    checked: [Boolean, Array],
     value: String,
+  },
+  computed: {
+    checkType() {
+      return typeof this.checked === "boolean";
+    },
+    classBind() {
+      if (this.checkType) {
+        return this.checked;
+      }
+      return this.checked.some((item) => item === this.value);
+    },
+  },
+  methods: {
+    sendEvent(e) {
+      if (this.checkType) {
+        this.$emit("change", e.target.checked);
+      } else {
+        // 여기부터
+        const idx = this.checked.indexOf(this.value);
+        let checkedList = [...this.checked];
+        if (idx !== -1) {
+          checkedList.splice(idx, 1);
+        } else {
+          checkedList.push(this.value);
+        }
+        // 여기까지!
+        this.$emit("change", checkedList);
+      }
+    },
   },
   model: {
     prop: "checked",
     event: "change",
-  },
-  methods: {
-    // sendEvent() {
-    //   this.$emit("get-checked");
-    // },
   },
 };
 </script>
