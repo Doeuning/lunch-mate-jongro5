@@ -340,19 +340,6 @@ export default {
   },
   mounted() {},
   methods: {
-    // 콜백함수 시작
-    // getData(callbackFunction) {
-    //   console.log("1. getData 실행");
-    //   axios.get(this.url).then((res) => {
-    //     console.log("2. data 받아오기 성공");
-    //     callbackFunction(res.data);
-    //   });
-    // },
-    // callBack(getdata) {
-    //   console.log("3. callback함수 실행");
-    //   this.results = getdata;
-    //   console.log("4. 데이터 바인딩 성공");
-    // },
     callbackHell() {
       console.log("시작");
 
