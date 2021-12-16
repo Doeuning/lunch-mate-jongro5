@@ -58,7 +58,8 @@ export default {
   name: "check-all",
   data() {
     return {
-      baseUrl: "https://jsonplaceholder.typicode.com/posts",
+      baseUrl:
+        "https://my-json-server.typicode.com/doeuning/lunch-mate-jongro5",
       userInfo: {
         id: "",
         password: "",
