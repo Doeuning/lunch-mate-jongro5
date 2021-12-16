@@ -9,8 +9,7 @@ Vue.use(Vuex);
 Vue.use(VueRouter);
 
 // axios.defaults.baseURL = "https://doeuning.github.io/";
-axios.defaults.baseURL =
-  "https://my-json-server.typicode.com/doeuning/lunch-mate-jongro5";
+axios.defaults.baseURL = "https://jsonplaceholder.typicode.com/";
 // axios.defaults.baseURL = "https://openapi.naver.com";
 
 new Vue({

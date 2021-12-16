@@ -6,11 +6,30 @@
         <div class="cont">
           <input type="text" class="input" v-model="userInfo.id" />
         </div>
+        <div v-if="validation.id" class="alert">
+          아이디 양식이 맞지 않습니다.
+        </div>
       </li>
       <li>
         <div class="sort">비밀번호</div>
         <div class="cont">
           <input type="password" class="input" v-model="userInfo.password" />
+        </div>
+        <div v-if="validation.password" class="alert">
+          비밀번호 양식이 맞지 않습니다.
+        </div>
+      </li>
+      <li>
+        <div class="sort">비밀번호 확인</div>
+        <div class="cont">
+          <input
+            type="password"
+            class="input"
+            v-model="userInfo.passwordConfirm"
+          />
+        </div>
+        <div v-if="validation.passwordConfirm" class="alert">
+          비밀번호 양식이 맞지 않습니다.
         </div>
       </li>
       <li>
@@ -18,17 +37,30 @@
         <div class="cont">
           <input type="text" class="input" v-model="userInfo.name" />
         </div>
+        <div v-if="validation.name" class="alert">한글로 입력 바랍니다.</div>
       </li>
       <li>
         <div class="sort">전화번호</div>
         <div class="cont">
-          <input type="tel" class="input" v-model="userInfo.cell" />
+          <input
+            type="tel"
+            class="input"
+            v-model="userInfo.cell"
+            maxlength="11"
+            @keyup="cellCheck"
+          />
+        </div>
+        <div v-if="validation.cell" class="alert">
+          전화번호 양식이 맞지 않습니다.
         </div>
       </li>
       <li>
         <div class="sort">이메일</div>
         <div class="cont">
           <input type="email" class="input" v-model="userInfo.email" />
+        </div>
+        <div v-if="validation.email" class="alert">
+          이메일 양식이 맞지 않습니다.
         </div>
       </li>
       <li>
@@ -58,25 +90,48 @@ export default {
   name: "check-all",
   data() {
     return {
-      baseUrl:
-        "https://my-json-server.typicode.com/doeuning/lunch-mate-jongro5",
       userInfo: {
         id: "",
         password: "",
+        passwordConfirm: "",
         name: "",
         cell: "",
         email: "",
         gender: "",
       },
+      validation: {
+        id: false,
+        password: false,
+        passwordConfirm: false,
+        name: false,
+        cell: false,
+        email: false,
+        gender: false,
+      },
     };
   },
   methods: {
+    cellCheck() {
+      const reg = /\D/;
+      const result = reg.test(this.userInfo.cell);
+      if (result) {
+        this.validation.cell = true;
+        this.userInfo.cell = this.userInfo.cell.substr(
+          0,
+          this.userInfo.cell.length - 1
+        );
+      } else {
+        this.validation.cell = false;
+      }
+    },
     sendData() {
       axios
-        .post(this.baseUrl, {
+        .post("/posts", {
           params: this.userInfo,
         })
-        .then(console.log);
+        .then((response) => {
+          console.log(response);
+        });
     },
   },
 };
@@ -91,7 +146,7 @@ export default {
   .join-info {
     li {
       display: flex;
-      flex: 1 1 auto;
+      flex-wrap: wrap;
       align-items: center;
       width: 100%;
       & + li {
@@ -100,10 +155,11 @@ export default {
       .sort {
         display: block;
         width: 100px;
+        flex: 0 0 100px;
       }
       .cont {
         display: block;
-        flex: 1;
+        flex: 1 0 auto;
         .input {
           display: block;
           box-sizing: border-box;
@@ -112,6 +168,11 @@ export default {
           border-radius: 5px;
           padding: 10px;
         }
+      }
+      .alert {
+        margin: 10px 0 0 100px;
+        color: red;
+        font-size: 14px;
       }
     }
   }
