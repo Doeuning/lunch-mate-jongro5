@@ -11,8 +11,8 @@ import Join from "/src/views/join.vue";
 
 const routes = [
   // { path: "/", component: BridgeIntro },
-  { path: "/bridge", component: BridgeIntro },
-  { path: "/", component: Async },
+  { path: "/", component: BridgeIntro },
+  { path: "/async", component: Async },
   { path: "/question", component: Question },
   { path: "/question-hard", component: QuestionHard },
   { path: "/address", component: Address },
