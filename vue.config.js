@@ -2,8 +2,8 @@ module.exports = {
   devServer: {
     overlay: false,
     proxy: {
-      "/async": {
-        target: "https://api.hnpwa.com",
+      "/": {
+        target: "https://www.juso.go.kr/addrlink/addrLinkApi.do",
         pathRewrite: { "^/": "" },
         changeOrigin: true,
         secure: false,

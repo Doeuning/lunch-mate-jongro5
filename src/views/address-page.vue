@@ -37,17 +37,24 @@
         @get-data="getData"
         :postCode="postCode"
         :address="address"
-      ></modal-box>
+        slot="body"
+      >
+        <find-address></find-address>
+      </modal-box>
     </transition>
   </div>
 </template>
 
 <script>
 import modalBox from "/src/components/modal-box";
+import findAddress from "/src/components/find-address";
 
 export default {
   name: "address-page",
-  components: { "modal-box": modalBox },
+  components: {
+    "modal-box": modalBox,
+    "find-address": findAddress,
+  },
   data() {
     return {
       postCode: "",

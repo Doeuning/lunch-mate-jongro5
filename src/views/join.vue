@@ -6,6 +6,9 @@
         <div class="cont">
           <div class="row">
             <input type="text" class="input" v-model="userInfo.id" />
+            <button class="btn" @click.prevent="duplicateCheck">
+              중복 확인
+            </button>
           </div>
           <div class="row" v-if="!validation.id">
             <div class="alert">아이디 양식이 맞지 않습니다.</div>
@@ -19,6 +22,7 @@
             <input
               type="password"
               class="input"
+              maxlength="12"
               v-model="userInfo.password"
               @keyup="passwordCheck"
             />
@@ -38,6 +42,7 @@
             <input
               type="password"
               class="input"
+              maxlength="12"
               v-model="userInfo.passwordConfirm"
             />
           </div>
@@ -58,7 +63,7 @@
         </div>
       </li>
       <li>
-        <div class="sort">전화번호</div>
+        <div class="sort done">전화번호</div>
         <div class="cont">
           <div class="row">
             <input
@@ -76,7 +81,7 @@
         </div>
       </li>
       <li>
-        <div class="sort">이메일</div>
+        <div class="sort done">이메일</div>
         <div class="cont">
           <div class="row">
             <input
@@ -107,19 +112,38 @@
         </div>
       </li>
       <li>
-        <div class="sort">주소</div>
+        <div class="sort done">주소</div>
         <div class="cont">
           <div class="row">
             <input
               type="email"
-              class="input"
-              v-model="userInfo.email"
-              @keyup="emailCheck"
+              :class="{ input: true, done: validation.address }"
+              readonly
+              v-model="userInfo.postCode"
+              @click.prevent="openLayer"
             />
-            <button class="btn">우편번호 찾기</button>
+            <button class="btn" @click.prevent="openLayer">
+              우편번호 찾기
+            </button>
           </div>
           <div class="row">
-            <input type="text" class="input" />
+            <input
+              type="text"
+              :class="{ input: true, done: validation.address }"
+              v-model="userInfo.address"
+              readonly
+            />
+          </div>
+          <div class="row">
+            <input
+              type="text"
+              class="input"
+              v-model="userInfo.extraAddress"
+              @keyup="addressCheck"
+            />
+          </div>
+          <div class="row" v-if="!validation.addressDone">
+            <div class="alert">※ 주소를 입력해주세요.</div>
           </div>
         </div>
       </li>
@@ -129,17 +153,26 @@
         가입하기
       </button>
     </div>
+    <transition name="fade">
+      <modal-box v-if="modalOpen" @modal-close="modalClose"
+        ><find-address @modal-close="modalClose"></find-address
+      ></modal-box>
+    </transition>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import EventBus from "/src/eventBus";
+import modalBox from "/src/components/modal-box";
+import findAddress from "/src/components/find-address";
 
 export default {
   name: "check-all",
   data() {
     return {
       disabled: true,
+      modalOpen: false,
       userInfo: {
         id: "",
         password: "",
@@ -148,6 +181,10 @@ export default {
         cell: "",
         email: "",
         gender: "",
+        postCode: "",
+        address: "",
+        extraAddress: "",
+        returnData: "",
       },
       validation: {
         id: true,
@@ -157,10 +194,31 @@ export default {
         cell: true,
         email: true,
         gender: true,
+        address: true,
+        addressDone: true,
+        extraAddress: true,
+        returnData: true,
       },
     };
   },
+  components: {
+    "modal-box": modalBox,
+    "find-address": findAddress,
+  },
+  updated() {
+    EventBus.$on(
+      "get-data",
+      function (data) {
+        this.userInfo.postCode = data.postCode;
+        this.userInfo.address = data.address;
+        this.validation.address = true;
+        this.validation.addressDone = false;
+        this.modalClose();
+      }.bind(this)
+    );
+  },
   methods: {
+    duplicateCheck() {},
     passwordCheck() {
       const reg = /a-zA-Z{2,}/g;
       let password = reg.test(this.userInfo.password);
@@ -189,10 +247,21 @@ export default {
       let email = reg.test(this.userInfo.email);
       console.log(email);
 
-      if (email) {
-        this.validation.email = true;
+      if (this.userInfo.email != "") {
+        if (email) {
+          this.validation.email = true;
+        } else {
+          this.validation.email = false;
+        }
       } else {
-        this.validation.email = false;
+        this.validation.email = true;
+      }
+    },
+    addressCheck() {
+      if (this.extraAddress === "") {
+        this.validation.addressDone = false;
+      } else {
+        this.validation.addressDone = true;
       }
     },
     sendData() {
@@ -204,13 +273,19 @@ export default {
           console.log(response);
         });
     },
+    openLayer() {
+      this.modalOpen = true;
+    },
+    modalClose() {
+      this.modalOpen = false;
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .join-wrap {
-  width: 400px;
+  width: 500px;
   margin: 0 auto;
   padding: 100px 0;
   text-align: left;
@@ -228,6 +303,9 @@ export default {
         width: 120px;
         flex: 0 0 120px;
         padding: 5px 0;
+        &.done {
+          color: cornflowerblue;
+        }
       }
       .cont {
         display: block;
@@ -239,10 +317,14 @@ export default {
           border: 1px solid #969690;
           border-radius: 5px;
           padding: 10px;
+          &.done {
+            background: #e9e9e9;
+          }
         }
         .btn {
           display: block;
           flex: 1 0 auto;
+          width: 140px;
           margin-left: 10px;
           border: none;
           border-radius: 5px;
@@ -260,6 +342,8 @@ export default {
         }
       }
       .alert {
+        padding: 0 0 0 20px;
+        text-indent: -20px;
         color: red;
         font-size: 14px;
       }
