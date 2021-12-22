@@ -10,13 +10,15 @@
               중복 확인
             </button>
           </div>
-          <div class="row" v-if="!validation.id">
-            <div class="alert">아이디 양식이 맞지 않습니다.</div>
-          </div>
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.id">
+              <div class="alert">아이디 양식이 맞지 않습니다.</div>
+            </div>
+          </transition>
         </div>
       </li>
       <li>
-        <div class="sort">비밀번호</div>
+        <div class="sort done">비밀번호</div>
         <div class="cont">
           <div class="row">
             <input
@@ -27,16 +29,18 @@
               @keyup="passwordCheck"
             />
           </div>
-          <div class="row" v-if="!validation.password">
-            <div class="alert">
-              ※ 비밀번호는 영문/숫자/특수문자 2가지 이상 조합으로 6~12자이어야
-              합니다.
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.password">
+              <div class="alert">
+                ※ 비밀번호는 영문/숫자/특수문자 2가지 이상 조합으로 6~12자이어야
+                합니다.
+              </div>
             </div>
-          </div>
+          </transition>
         </div>
       </li>
       <li>
-        <div class="sort">비밀번호 확인</div>
+        <div class="sort done">비밀번호 확인</div>
         <div class="cont">
           <div class="row">
             <input
@@ -44,22 +48,34 @@
               class="input"
               maxlength="12"
               v-model="userInfo.passwordConfirm"
+              @keyup="passwordConfirmCheck"
             />
           </div>
-          <div class="row" v-if="!validation.passwordConfirm">
-            <div class="alert">※ 비밀번호가 동일하지 않습니다.</div>
-          </div>
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.passwordConfirm">
+              <div class="alert">※ 비밀번호가 동일하지 않습니다.</div>
+            </div>
+          </transition>
         </div>
       </li>
       <li>
-        <div class="sort">이름</div>
+        <div class="sort done">이름</div>
         <div class="cont">
           <div class="row">
-            <input type="text" class="input" v-model="userInfo.name" />
+            <input
+              type="text"
+              class="input"
+              maxlength="20"
+              :value="userInfo.name"
+              @input="nameCheck"
+            />
+            <!-- 현재 가장 긴 이름은 최대 17자. 1993년부터 성을 제외하고 5자 이내로 제한. -->
           </div>
-          <div class="row" v-if="!validation.name">
-            <div class="alert">※ 한글로 입력 바랍니다.</div>
-          </div>
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.name">
+              <div class="alert">※ 한글로 입력 바랍니다.</div>
+            </div>
+          </transition>
         </div>
       </li>
       <li>
@@ -69,15 +85,16 @@
             <input
               type="tel"
               class="input"
-              v-model="userInfo.cell"
+              :value="userInfo.cell"
               maxlength="11"
-              @keyup="cellCheck"
-              @keydown="cellCheck"
+              @input="cellCheck"
             />
           </div>
-          <div class="row" v-if="!validation.cell">
-            <div class="alert">※ 전화번호 양식이 맞지 않습니다.</div>
-          </div>
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.cell">
+              <div class="alert">※ 전화번호 양식이 맞지 않습니다.</div>
+            </div>
+          </transition>
         </div>
       </li>
       <li>
@@ -91,9 +108,11 @@
               @keyup="emailCheck"
             />
           </div>
-          <div class="row" v-if="!validation.email">
-            <div class="alert">※ 이메일 양식이 맞지 않습니다.</div>
-          </div>
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.email">
+              <div class="alert">※ 이메일 양식이 맞지 않습니다.</div>
+            </div>
+          </transition>
         </div>
       </li>
       <li>
@@ -142,9 +161,11 @@
               @keyup="addressCheck"
             />
           </div>
-          <div class="row" v-if="!validation.addressDone">
-            <div class="alert">※ 주소를 입력해주세요.</div>
-          </div>
+          <transition name="alert" mode="out-in">
+            <div class="row" v-if="!validation.addressDone">
+              <div class="alert">※ 주소를 입력해주세요.</div>
+            </div>
+          </transition>
         </div>
       </li>
     </ul>
@@ -153,7 +174,7 @@
         가입하기
       </button>
     </div>
-    <transition name="fade">
+    <transition name="alert">
       <modal-box v-if="modalOpen" @modal-close="modalClose"
         ><find-address @modal-close="modalClose"></find-address
       ></modal-box>
@@ -219,25 +240,53 @@ export default {
   },
   methods: {
     duplicateCheck() {},
+    nameCheck(e) {
+      this.userInfo.name = e.target.value;
+      const reg = /[^가-힣]/g;
+      let name = reg.test(this.userInfo.name);
+      console.log(name);
+      if (name) {
+        this.validation.name = false;
+      } else {
+        this.validation.name = true;
+      }
+    },
     passwordCheck() {
-      const reg = /a-zA-Z{2,}/g;
+      const reg =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$#%^&!%*?&]{6,12}$/;
       let password = reg.test(this.userInfo.password);
-      console.log(password);
-      if (password) {
+      console.log(this.userInfo.password, password);
+      if (password || this.userInfo.password === "") {
         this.validation.password = true;
       } else {
         this.validation.password = false;
       }
     },
-    cellCheck() {
-      const reg = /\D/;
-      let cell = reg.test(this.userInfo.cell);
-      if (cell) {
-        this.validation.cell = false;
-        this.userInfo.cell = this.userInfo.cell.substr(
-          0,
-          this.userInfo.cell.length - 1
-        );
+    passwordConfirmCheck() {
+      if (
+        this.userInfo.passwordConfirm === "" ||
+        this.userInfo.passwordConfirm === this.userInfo.password
+      ) {
+        this.validation.passwordConfirm = true;
+      } else {
+        this.validation.passwordConfirm = false;
+      }
+    },
+    cellCheck(e) {
+      const reg = /^\d+$/;
+      let cell = reg.test(e.target.value);
+      console.log(cell);
+      this.userInfo.cell = e.target.value;
+      if (e.target.value !== "") {
+        if (cell) {
+          this.validation.cell = true;
+        } else {
+          this.userInfo.cell = this.userInfo.cell.substr(
+            0,
+            this.userInfo.cell.length - 1
+          );
+          this.validation.cell = false;
+        }
       } else {
         this.validation.cell = true;
       }
@@ -258,7 +307,7 @@ export default {
       }
     },
     addressCheck() {
-      if (this.extraAddress === "") {
+      if (this.extraAddress === "" || this.extraAddress === null) {
         this.validation.addressDone = false;
       } else {
         this.validation.addressDone = true;
@@ -363,5 +412,33 @@ export default {
       cursor: pointer;
     }
   }
+}
+.alert-enter-from {
+  opacity: 0;
+  max-height: 0;
+}
+.alert-enter-to {
+  opacity: 1;
+  max-height: 50px;
+}
+.alert-enter-active {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.alert-leave-from {
+  opacity: 1;
+  max-height: 50px;
+}
+.alert-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+.alert-leave-active {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.alert-move {
+  transition: all 0.3s ease;
 }
 </style>
