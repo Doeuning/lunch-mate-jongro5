@@ -1,7 +1,7 @@
 <template>
   <div class="join-wrap">
-    <ul class="join-info">
-      <li>
+    <transition-group tag="ul" name="alert" class="join-info">
+      <li key="userInfo.id">
         <div class="sort">아이디</div>
         <div class="cont">
           <div class="row">
@@ -17,7 +17,7 @@
           </transition>
         </div>
       </li>
-      <li>
+      <li key="userInfo.password">
         <div class="sort done">비밀번호</div>
         <div class="cont">
           <div class="row">
@@ -39,7 +39,7 @@
           </transition>
         </div>
       </li>
-      <li>
+      <li key="userInfo.passwordConfirm">
         <div class="sort done">비밀번호 확인</div>
         <div class="cont">
           <div class="row">
@@ -58,7 +58,7 @@
           </transition>
         </div>
       </li>
-      <li>
+      <li key="userInfo.name">
         <div class="sort done">이름</div>
         <div class="cont">
           <div class="row">
@@ -78,7 +78,7 @@
           </transition>
         </div>
       </li>
-      <li>
+      <li key="userInfo.cell">
         <div class="sort done">전화번호</div>
         <div class="cont">
           <div class="row">
@@ -97,7 +97,7 @@
           </transition>
         </div>
       </li>
-      <li>
+      <li key="userInfo.email">
         <div class="sort done">이메일</div>
         <div class="cont">
           <div class="row">
@@ -115,28 +115,28 @@
           </transition>
         </div>
       </li>
-      <li>
-        <div class="sort">성별</div>
-        <div class="cont">
-          <div class="row">
-            <label for="genderMale">
-              <input type="radio" id="genderMale" name="genderSelect" />
-              <span>남자</span>
-            </label>
-            <label for="genderFemale">
-              <input type="radio" id="genderFemale" name="genderSelect" />
-              <span>여자</span>
-            </label>
-          </div>
-        </div>
-      </li>
-      <li>
+      <!--      <li key="userInfo.gender">-->
+      <!--        <div class="sort">성별</div>-->
+      <!--        <div class="cont">-->
+      <!--          <div class="row">-->
+      <!--            <label for="genderMale">-->
+      <!--              <input type="radio" id="genderMale" name="genderSelect" />-->
+      <!--              <span>남자</span>-->
+      <!--            </label>-->
+      <!--            <label for="genderFemale">-->
+      <!--              <input type="radio" id="genderFemale" name="genderSelect" />-->
+      <!--              <span>여자</span>-->
+      <!--            </label>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </li>-->
+      <li key="userInfo.address">
         <div class="sort done">주소</div>
         <div class="cont">
           <div class="row">
             <input
               type="email"
-              :class="{ input: true, done: validation.address }"
+              :class="{ input: true, done: !validation.addressDone }"
               readonly
               v-model="userInfo.postCode"
               @click.prevent="openLayer"
@@ -148,7 +148,7 @@
           <div class="row">
             <input
               type="text"
-              :class="{ input: true, done: validation.address }"
+              :class="{ input: true, done: !validation.addressDone }"
               v-model="userInfo.address"
               readonly
             />
@@ -163,12 +163,12 @@
           </div>
           <transition name="alert" mode="out-in">
             <div class="row" v-if="!validation.addressDone">
-              <div class="alert">※ 주소를 입력해주세요.</div>
+              <div class="alert">※ 상세 주소를 입력해주세요.</div>
             </div>
           </transition>
         </div>
       </li>
-    </ul>
+    </transition-group>
     <div class="btn-wrap">
       <button class="btn" :disabled="disabled" @click="sendData">
         가입하기
@@ -253,7 +253,7 @@ export default {
     },
     passwordCheck() {
       const reg =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$#%^&!%*?&]{6,12}$/;
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$#%^!%*?&]{6,12}$/;
       let password = reg.test(this.userInfo.password);
       console.log(this.userInfo.password, password);
       if (password || this.userInfo.password === "") {
@@ -339,6 +339,7 @@ export default {
   padding: 100px 0;
   text-align: left;
   .join-info {
+    position: relative;
     li {
       width: 100%;
       display: flex;
@@ -385,6 +386,7 @@ export default {
         }
         .row {
           display: flex;
+          transition: all 0.3s;
           & ~ .row {
             margin-top: 10px;
           }
@@ -415,27 +417,22 @@ export default {
 }
 .alert-enter-from {
   opacity: 0;
-  max-height: 0;
 }
 .alert-enter-to {
   opacity: 1;
-  max-height: 50px;
 }
 .alert-enter-active {
-  overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .alert-leave-from {
   opacity: 1;
-  max-height: 50px;
 }
 .alert-leave-to {
   opacity: 0;
-  max-height: 0;
 }
 .alert-leave-active {
-  overflow: hidden;
+  position: absolute;
   transition: all 0.3s ease;
 }
 .alert-move {
