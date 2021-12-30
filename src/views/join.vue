@@ -143,7 +143,7 @@
           <div class="row">
             <input
               type="email"
-              :class="{ input: true, done: validation.addressDone === false }"
+              :class="{ input: true, done: validation.address === true }"
               readonly
               v-model="userInfo.postCode"
               @click.prevent="openLayer"
@@ -155,7 +155,7 @@
           <div class="row">
             <input
               type="text"
-              :class="{ input: true, done: validation.extraAddress === false }"
+              :class="{ input: true, done: validation.address === true }"
               v-model="userInfo.address"
               readonly
             />
@@ -221,8 +221,8 @@ export default {
         email: "",
         // gender: '',
         address: "",
-        addressDone: "",
         extraAddress: "",
+        addressDone: "",
       },
     };
   },
@@ -335,10 +335,15 @@ export default {
       }
     },
     addressCheck() {
-      if (this.extraAddress === "" || this.extraAddress === null) {
+      if (
+        this.userInfo.extraAddress === "" ||
+        this.userInfo.extraAddress === null
+      ) {
         this.validation.extraAddress = false;
+        this.validation.addressDone = false;
       } else {
         this.validation.extraAddress = true;
+        this.validation.addressDone = true;
       }
     },
     sendData() {
