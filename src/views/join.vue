@@ -5,20 +5,27 @@
         <div class="sort">아이디</div>
         <div class="cont">
           <div class="row">
-            <input type="text" class="input" v-model="userInfo.id" />
-            <button class="btn" @click.prevent="duplicateCheck">
-              중복 확인
-            </button>
+            <input
+              type="text"
+              class="input"
+              v-model="userInfo.id"
+              @input="idCheck"
+            />
+            <!--            <button class="btn" @click.prevent="duplicateCheck">-->
+            <!--              중복 확인-->
+            <!--            </button>-->
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.id">
-              <div class="alert">아이디 양식이 맞지 않습니다.</div>
+            <div class="row" v-if="validation.id === false">
+              <div class="alert">
+                ※ 아이디는 영문 또는 숫자만 입력 가능합니다.
+              </div>
             </div>
           </transition>
         </div>
       </li>
       <li key="userInfo.password">
-        <div class="sort done">비밀번호</div>
+        <div class="sort">비밀번호</div>
         <div class="cont">
           <div class="row">
             <input
@@ -26,11 +33,11 @@
               class="input"
               maxlength="12"
               v-model="userInfo.password"
-              @keyup="passwordCheck"
+              @input="passwordCheck"
             />
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.password">
+            <div class="row" v-if="validation.password === false">
               <div class="alert">
                 ※ 비밀번호는 영문/숫자/특수문자 2가지 이상 조합으로 6~12자이어야
                 합니다.
@@ -40,7 +47,7 @@
         </div>
       </li>
       <li key="userInfo.passwordConfirm">
-        <div class="sort done">비밀번호 확인</div>
+        <div class="sort">비밀번호 확인</div>
         <div class="cont">
           <div class="row">
             <input
@@ -48,18 +55,18 @@
               class="input"
               maxlength="12"
               v-model="userInfo.passwordConfirm"
-              @keyup="passwordConfirmCheck"
+              @input="passwordConfirmCheck"
             />
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.passwordConfirm">
+            <div class="row" v-if="validation.passwordConfirm === false">
               <div class="alert">※ 비밀번호가 동일하지 않습니다.</div>
             </div>
           </transition>
         </div>
       </li>
       <li key="userInfo.name">
-        <div class="sort done">이름</div>
+        <div class="sort">이름</div>
         <div class="cont">
           <div class="row">
             <input
@@ -72,14 +79,14 @@
             <!-- 현재 가장 긴 이름은 최대 17자. 1993년부터 성을 제외하고 5자 이내로 제한. -->
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.name">
+            <div class="row" v-if="validation.name === false">
               <div class="alert">※ 한글로 입력 바랍니다.</div>
             </div>
           </transition>
         </div>
       </li>
       <li key="userInfo.cell">
-        <div class="sort done">전화번호</div>
+        <div class="sort">전화번호</div>
         <div class="cont">
           <div class="row">
             <input
@@ -91,25 +98,25 @@
             />
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.cell">
+            <div class="row" v-if="validation.cell === false">
               <div class="alert">※ 전화번호 양식이 맞지 않습니다.</div>
             </div>
           </transition>
         </div>
       </li>
       <li key="userInfo.email">
-        <div class="sort done">이메일</div>
+        <div class="sort">이메일</div>
         <div class="cont">
           <div class="row">
             <input
               type="email"
               class="input"
               v-model="userInfo.email"
-              @keyup="emailCheck"
+              @input="emailCheck"
             />
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.email">
+            <div class="row" v-if="validation.email === false">
               <div class="alert">※ 이메일 양식이 맞지 않습니다.</div>
             </div>
           </transition>
@@ -131,12 +138,12 @@
       <!--        </div>-->
       <!--      </li>-->
       <li key="userInfo.address">
-        <div class="sort done">주소</div>
+        <div class="sort">주소</div>
         <div class="cont">
           <div class="row">
             <input
               type="email"
-              :class="{ input: true, done: !validation.addressDone }"
+              :class="{ input: true, done: validation.addressDone === false }"
               readonly
               v-model="userInfo.postCode"
               @click.prevent="openLayer"
@@ -148,7 +155,7 @@
           <div class="row">
             <input
               type="text"
-              :class="{ input: true, done: !validation.addressDone }"
+              :class="{ input: true, done: validation.extraAddress === false }"
               v-model="userInfo.address"
               readonly
             />
@@ -158,11 +165,11 @@
               type="text"
               class="input"
               v-model="userInfo.extraAddress"
-              @keyup="addressCheck"
+              @input="addressCheck"
             />
           </div>
           <transition name="alert" mode="out-in">
-            <div class="row" v-if="!validation.addressDone">
+            <div class="row" v-if="validation.addressDone === false">
               <div class="alert">※ 상세 주소를 입력해주세요.</div>
             </div>
           </transition>
@@ -192,7 +199,6 @@ export default {
   name: "check-all",
   data() {
     return {
-      disabled: true,
       modalOpen: false,
       userInfo: {
         id: "",
@@ -205,26 +211,38 @@ export default {
         postCode: "",
         address: "",
         extraAddress: "",
-        returnData: "",
       },
       validation: {
-        id: true,
-        password: true,
-        passwordConfirm: true,
-        name: true,
-        cell: true,
-        email: true,
-        gender: true,
-        address: true,
-        addressDone: true,
-        extraAddress: true,
-        returnData: true,
+        id: "",
+        password: "",
+        passwordConfirm: "",
+        name: "",
+        cell: "",
+        email: "",
+        // gender: '',
+        address: "",
+        addressDone: "",
+        extraAddress: "",
       },
     };
   },
   components: {
     "modal-box": modalBox,
     "find-address": findAddress,
+  },
+  computed: {
+    disabled() {
+      const valueCheck = Object.values(this.validation).every((value) => {
+        return value === true;
+      });
+      console.log(valueCheck);
+      return !valueCheck;
+      // if (valueCheck) {
+      //   return Object.values(this.validation).every((value) => value);
+      // } else {
+      //   return false;
+      // }
+    },
   },
   updated() {
     EventBus.$on(
@@ -239,7 +257,17 @@ export default {
     );
   },
   methods: {
-    duplicateCheck() {},
+    idCheck(e) {
+      this.userInfo.id = e.target.value;
+      const reg = /[^a-zA-Z0-9]/g;
+      let id = reg.test(this.userInfo.id);
+      console.log(id);
+      if (id) {
+        this.validation.id = false;
+      } else {
+        this.validation.id = true;
+      }
+    },
     nameCheck(e) {
       this.userInfo.name = e.target.value;
       const reg = /[^가-힣]/g;
@@ -256,7 +284,7 @@ export default {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$#%^!%*?&]{6,12}$/;
       let password = reg.test(this.userInfo.password);
       console.log(this.userInfo.password, password);
-      if (password || this.userInfo.password === "") {
+      if (password) {
         this.validation.password = true;
       } else {
         this.validation.password = false;
@@ -264,7 +292,7 @@ export default {
     },
     passwordConfirmCheck() {
       if (
-        this.userInfo.passwordConfirm === "" ||
+        this.userInfo.passwordConfirm !== "" &&
         this.userInfo.passwordConfirm === this.userInfo.password
       ) {
         this.validation.passwordConfirm = true;
@@ -308,9 +336,9 @@ export default {
     },
     addressCheck() {
       if (this.extraAddress === "" || this.extraAddress === null) {
-        this.validation.addressDone = false;
+        this.validation.extraAddress = false;
       } else {
-        this.validation.addressDone = true;
+        this.validation.extraAddress = true;
       }
     },
     sendData() {
@@ -408,10 +436,14 @@ export default {
       border: none;
       border-radius: 5px;
       padding: 20px;
-      background: #969690;
-      color: #fff;
+      background: cornflowerblue;
+      font-weight: 700;
       font-size: 16px;
+      color: #fff;
       cursor: pointer;
+      &:disabled {
+        background: #969690;
+      }
     }
   }
 }
