@@ -375,6 +375,15 @@ export default {
           console.log(videos);
           videoDetails(videos[0], (movie) => {
             console.log(movie.type);
+            videoDetails(videos[0], (movie) => {
+              console.log(movie.type);
+            videoDetails(videos[0], (movie) => {
+              console.log(movie.type);
+            videoDetails(videos[0], (movie) => {
+              console.log(movie.type);
+            });
+            });
+            });
           });
         });
       });

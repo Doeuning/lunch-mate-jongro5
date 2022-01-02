@@ -8,6 +8,7 @@ import Qna from "/src/views/qna.vue";
 import Async from "/src/views/async.vue";
 import CheckAll from "/src/views/check-all.vue";
 import Join from "/src/views/join.vue";
+import JoinValidate from "/src/views/join-validate.vue";
 
 const routes = [
   // { path: "/", component: BridgeIntro },
@@ -21,6 +22,7 @@ const routes = [
   { path: "/async", component: Async },
   { path: "/check-all", component: CheckAll },
   { path: "/join", component: Join },
+  { path: "/join-validate", component: JoinValidate },
 ];
 
 const router = new VueRouter({
